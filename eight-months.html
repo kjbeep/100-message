@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Months</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #221420;
+    --ink-deep: #180d17;
+    --rose: #c98a93;
+    --rose-dim: #8a5a60;
+    --gold: #c9a15a;
+    --gold-soft: #e2c98f;
+    --cream: #f3e9e4;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    height: 100%;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    overflow-x: hidden;
+  }
+
+  body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 6vh 5vw 8vh;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,138,147,0.18), transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(201,161,90,0.10), transparent 55%),
+      var(--ink);
+  }
+
+  /* faint constellation of 8 points, one per month */
+  .month-trail{
+    position: absolute;
+    top: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(560px, 80vw);
+    height: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.85;
+  }
+  .month-trail .dot{
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--rose-dim);
+    position: relative;
+  }
+  .month-trail .dot.lit{
+    background: var(--gold-soft);
+    box-shadow: 0 0 8px 1px rgba(226,201,143,0.6);
+  }
+  .month-trail::before{
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,138,147,0.35) 10%, rgba(201,138,147,0.35) 90%, transparent);
+    z-index: -1;
+  }
+
+  header{
+    text-align: center;
+    margin-top: 6vh;
+    margin-bottom: 5vh;
+  }
+
+  .eyebrow{
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 0.9rem;
+  }
+
+  h1{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    margin: 0;
+    line-height: 1.05;
+    color: var(--cream);
+  }
+
+  h1 em{
+    font-style: italic;
+    color: var(--gold-soft);
+    font-weight: 400;
+  }
+
+  .sub{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    color: rgba(243,233,228,0.7);
+    margin-top: 1rem;
+    max-width: 34ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---------- CARD GRID ---------- */
+  .stage{
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    max-height: 56vh;
+    margin-top: 2vh;
+    overflow-y: auto;
+    padding: 8px 4px 24px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stage::-webkit-scrollbar{ width: 5px; }
+  .stage::-webkit-scrollbar-thumb{ background: rgba(226,201,143,0.3); border-radius: 3px; }
+
+  .fan{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+    gap: 8px;
+    justify-items: center;
+  }
+
+  .card{
+    --lift: 0px;
+    position: relative;
+    width: 100%;
+    max-width: 58px;
+    aspect-ratio: 32 / 29;
+    cursor: pointer;
+    transform: translateY(var(--lift)) scale(1);
+    transition: transform 0.3s cubic-bezier(.22,.68,0,1.12), opacity 0.5s ease, filter 0.5s ease;
+  }
+
+  .card:hover{
+    --lift: -6px;
+  }
+
+  .card .face{
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    backface-visibility: hidden;
+  }
+
+  .card .back{
+    background:
+      radial-gradient(circle at 50% 38%, rgba(226,201,143,0.22), transparent 55%),
+      linear-gradient(160deg, #3a2030, #1c1119 75%);
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path d="M16 29 C16 29 0 18 0 8 C0 3 4 0 8 0 C12 0 16 4 16 4 C16 4 20 0 24 0 C28 0 32 3 32 8 C32 18 16 29 16 29 Z"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path d="M16 29 C16 29 0 18 0 8 C0 3 4 0 8 0 C12 0 16 4 16 4 C16 4 20 0 24 0 C28 0 32 3 32 8 C32 18 16 29 16 29 Z"/></svg>');
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card .back .mark{
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.6rem;
+    color: var(--gold-soft);
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
+  .card.disabled{
+    opacity: 0.28;
+    filter: saturate(0.4);
+    pointer-events: none;
+  }
+
+  .card.chosen{
+    z-index: 5;
+  }
+
+  /* ---------- REVEAL ---------- */
+  .reveal{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10,6,10,0);
+    pointer-events: none;
+    opacity: 0;
+    transition: background 0.6s ease, opacity 0.6s ease;
+    z-index: 20;
+    padding: 6vw;
+  }
+
+  .reveal.active{
+    background: rgba(10,6,10,0.86);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .reveal-card{
+    width: min(360px, 86vw);
+    padding: 2.6rem 2.1rem 2.2rem;
+    border-radius: 14px;
+    background: linear-gradient(165deg, #34202f, #201017 75%);
+    border: 1px solid rgba(226,201,143,0.4);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.55);
+    text-align: center;
+    transform: scale(0.85) translateY(20px);
+    transition: transform 0.6s cubic-bezier(.22,.68,0,1.12);
+  }
+
+  .reveal.active .reveal-card{
+    transform: scale(1) translateY(0);
+  }
+
+  .reveal-eyebrow{
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 1.1rem;
+  }
+
+  .reveal-message{
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 3.4vw, 1.6rem);
+    line-height: 1.5;
+    color: var(--cream);
+  }
+
+  .reveal-foot{
+    margin-top: 1.6rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: rgba(243,233,228,0.55);
+  }
+
+  .close-btn{
+    margin-top: 1.8rem;
+    background: none;
+    border: 1px solid rgba(226,201,143,0.5);
+    color: var(--gold-soft);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .close-btn:hover{
+    background: var(--gold-soft);
+    color: var(--ink-deep);
+  }
+
+  .hint{
+    margin-top: 3vh;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    color: rgba(243,233,228,0.4);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .reveal, .reveal-card{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="month-trail" id="monthTrail"></div>
+
+  <header>
+    <div class="eyebrow">Eight months, today</div>
+    <h1>Pick <em>one</em> card</h1>
+    <p class="sub">100 cards. Only one. Whatever you draw is yours for today.</p>
+  </header>
+
+  <div class="stage">
+    <div class="fan" id="fan"></div>
+  </div>
+
+  <p class="hint" id="hint">tap a card — you only get one</p>
+
+  <div class="reveal" id="reveal">
+    <div class="reveal-card">
+      <div class="reveal-eyebrow">Today's reward</div>
+      <div class="reveal-message" id="revealMessage"></div>
+      <div class="reveal-foot">8 months down. still my favourite one.</div>
+      <button class="close-btn" id="closeBtn">keep this close</button>
+    </div>
+  </div>
+
+<script>
+  // ---- WRITE YOUR 100 MESSAGES HERE ----
+  // One string per card. Card 1 uses messages[0], card 2 uses messages[1], etc.
+  // If you add fewer than 100, the list just repeats to fill the rest.
+  const messages = [
+    "Thank you for saying \"Hello\". You probably didn't know it then... But one simple conversation slowly became one of the best part of my life",
+    "If someone had told me eight months ago that you'd become one of my favorite people... I would have smiled and said \"I hope so\".",
+    "If I had another chance to meet you... I'd still choose to know you. Every single time.",
+    "Your name still makes me smile, I don't think that will ever become ordinary",
+    "You crossed my mind today. Actually... you do that a lot.",
+    "Life hasn't always been easy. Yet here we are. Thank you for staying.",
+    "You know what's funny? Sometimes the best part of my day... Is simply talking to you.",
+    "I still love your voice. It has this calmness that makes me wanna keep listening, and fall asleep to it.",
+    "You probably think I don't notice. But I do. I notice the effort. The little changes. The moment you try. And they mean more to me than you realize.",
+    "One of my favorite things about you... is simply that you're you. Nothing more, nothing less.",
+    "Thank you for trusting me with parts of yourself. I know that it isn't easy for you. I hope you know I'll always treat that trust gently.",
+    "I know you don't always feel strong. But strength isn't pretending everything is okay. It's waking up and trying again. You've done that more times than you give yourself credit for.",
+    "Please don't forget... You're enough. Even on your hardest days. Especially on your hardest days.",
+    "I hope life becomes gentler with you. You've carried enough for one lifetime.",
+    "I admire the way you keep going. Not because it's easy. But because you choose to.",
+    "You may not always say much. But somehow... your quiet has become familiar. Comforting, even.",
+    "Home isn't always a place. Sometimes... it's a person. You've become one of mine.",
+    "Thank you for every random conversation. Every unexpected joke. Every moment that made me smile without you even realizing it.",
+    "If I had one wish today... I'd wish for you to see yourself through my eyes. I think you'd finally understand why I love you so much.",
+    "I know you sometimes think you're behind in life. I don't. I see someone who's survived difficult seasons and still finds the strength to keep moving forward. I'm proud of you.",
+    "My favorite memories with you aren't the big ones. They're the ordinary ones. The conversations. The check-ins. The quiet moments. Those are the ones I treasure most.",
+    "I hope you never feel like you have to earn my love. You don't. You already have it.",
+    "Eight months. Hundreds of conversations. Thousands of little moments. And somehow... I still find new reasons to love you.",
+    "If this card made you smile... then my heart has already accomplished what it came here to do. Now go pick another one. I hid ninety-nine more pieces of my heart for you.",
+    "You crossed my mind today. Then again yesterday. And probably tomorrow, too. I guess that's what loving you does.",
+    "I love the little things about you. The things you probably don't even notice about yourself. Those are usually my favorite.",
+    "Thank you for every conversation we've shared. Even the random ones. Especially the random ones.",
+    "If you only knew how often you make me smile... I think you'd blush.",
+    "I hope you never question whether you matter. Because to me... you do. More than you know.",
+    "One of my favorite places isn't a place at all. It's wherever our conversation happens to be.",
+    "I hope you're taking care of yourself. Not because you have to. Because you deserve to.",
+    "I love listening to the way you think. Even when we don't see things the same way. You always give me something new to consider.",
+    "You don't always love loudly. I've learned that. Sometimes your love is simply showing up. And I've learned to appreciate that.",
+    "I hope I get to see your smile many more times. It never fails to brighten my day.",
+    "You're one of the first people I want to tell things to. Good news. Bad news. Random thoughts. You're my person.",
+    "Please don't be so hard on yourself. You're doing better than you think.",
+    "Out of all the people in the world... I somehow found you. I think that's pretty amazing.",
+    "You don't always show it. But I know you have a good heart. That's one of the reasons I love you.",
+    "Eight months later... and I'm still grateful I replied to your first message.",
+    "You've survived every difficult day you've ever faced. That's something to be proud of.",
+    "If I could, I'd hug you right now. No words. Just a hug.",
+    "Somehow, you bring me peace. Even when we're just talking about ordinary things.",
+    "Even when you doubt yourself... I'll believe in you. Until you can believe in yourself again.",
+    "This one's simple. I'm really glad you exist.",
+    "One of my favorite habits is talking to you. I hope it stays that way for a very long time.",
+    "I hope life surprises you with beautiful things. You've earned them.",
+    "If today feels heavy... Please remember... you don't have to carry the whole world by yourself.",
+    "After all this time... I still get excited to hear from you.",
+    "You're halfway through these little messages. If you've made it this far... I hope you've smiled at least once. Because every single one was written with love. ❤️",
+    "I hope this morning greeted you gently. And if it didn't... I hope you know that someone is already wishing your day gets better.",
+    "Who would've thought that one conversation would turn into one of my favorite adventures? I'm so glad it did.",
+    "You don't always realize it, but your quiet strength inspires me. Not because you never struggle. Because you keep going anyway.",
+    "One of my favorite things is simply listening to you. Whether you're talking about something serious or something completely random, I love hearing your thoughts.",
+    "Life can be exhausting sometimes. But somehow, talking to you makes even difficult days feel a little lighter. Thank you for that.",
+    "Without even asking... You slowly found a place in my heart. And now I couldn't imagine it without you.",
+    "If I could wish one thing for you... I'd wish that you finally see yourself the way the people who love you do. Especially me.",
+    "I like that we've created our own little world. Different routines. Different time zones. Different personalities. Yet somehow... we always find our way back to each other.",
+    "So many things change with time. Days pass. Seasons change. Life moves forward. But one thing hasn't changed — I'm still so grateful that you're here.",
+    "Never feel like you have to become someone else to be loved. The person I fell in love with is already enough.",
+    "You have no idea how many random smiles you've caused without even trying.",
+    "I hope you remember to slow down sometimes. The world can wait.",
+    "If I could take away one thing from your life, it would be every doubt you have about yourself.",
+    "You may not always say much, but I notice the way you care. It's quiet. It's different. But it's real.",
+    "It's been eight months... and somehow you still give me butterflies.",
+    "I hope you're proud of yourself for the little victories. I know I am.",
+    "Thank you for making another ordinary day a little more beautiful just by being in it.",
+    "If today gets difficult... remember that someone, somewhere, is rooting for you. Always.",
+    "I love how your mind works. You make me see the world differently.",
+    "If you're smiling while reading this... mission accomplished.",
+    "Never lose your kindness. The world needs more of it.",
+    "Thank you for every laugh you've given me. Every single one mattered.",
+    "We don't always think alike. We don't always react the same way. But somehow... we've learned to understand each other a little better. And I love that.",
+    "I hope one day you think of me as somewhere you can rest your heart.",
+    "One of the best decisions I've ever made... was letting you into my life.",
+    "I wish I could bottle up your laugh and replay it whenever I miss you.",
+    "I don't know what tomorrow looks like. But I hope you're in it.",
+    "You'll never have to earn my affection. You already have it.",
+    "Sometimes all I need is knowing you're there. That's enough to make me feel better.",
+    "I'm really, really glad I met you.",
+    "I'll still choose you on the difficult days. Those are the days love matters the most.",
+    "Drink some water. Stretch. Eat something nice. And don't forget someone loves you.",
+    "I hope life surprises you with more reasons to smile than to worry.",
+    "The world became a little better the day you were born. I'm convinced of that.",
+    "Somehow... you've become one of the people who make me feel safe.",
+    "Out of all the people I get to talk to... you're still my favorite.",
+    "You don't always see your own goodness. I do. Every day.",
+    "No matter what life tells you... you are worthy of love",
+    "If you ever forget how amazing you are... come back to these cards. I'll gladly remind you.",
+    "This card doesn't need a reason. I simply wanted another chance to tell you... I love you.",
+    "Out of all the chapters in my life... meeting you is one of my favorites.",
+    "We're not the same people we were eight months ago. I think we've both grown. And I'm proud of us.",
+    "If something exciting happens... you're one of the first people I want to tell. That's how important you've become to me.",
+    "Life has challenged you. Our relationship has challenged us. But you've kept trying. Thank you.",
+    "If you're still reading... I hope you're smiling. Because I definitely was while writing these.",
+    "There are so many people in this world. Yet somehow... my heart found you.",
+    "Eight months later... and I'd still choose this story. I'd still choose you.",
+    "My quiet wish is simple. That life becomes kinder to you. Because you deserve kindness.",
+    "If you've made it this far... thank you for reading every little piece of my heart. I meant every single word.",
+    "Thank you. For every conversation. For every laugh. For every lesson.",
+    "Thank you for loving me in your own beautiful way. No matter where life takes us from here, these eight months will always be one of the chapters I'll hold close to my heart."
+  ];
+
+  // build the month trail (8 dots, all lit — 8 months made it here)
+  const trail = document.getElementById('monthTrail');
+  for(let i=0;i<8;i++){
+    const d = document.createElement('div');
+    d.className = 'dot lit';
+    trail.appendChild(d);
+  }
+
+  const fan = document.getElementById('fan');
+  const totalCards = 100;
+  const cards = [];
+
+  for(let i=0;i<totalCards;i++){
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const back = document.createElement('div');
+    back.className = 'face back';
+    const mark = document.createElement('div');
+    mark.className = 'mark';
+    mark.textContent = i+1;
+    back.appendChild(mark);
+    card.appendChild(back);
+
+    card.addEventListener('click', () => chooseCard(i, card));
+    fan.appendChild(card);
+    cards.push(card);
+  }
+
+  let chosen = false;
+
+  function chooseCard(index, cardEl){
+    if(chosen) return;
+    chosen = true;
+
+    cards.forEach(c => {
+      if(c !== cardEl) c.classList.add('disabled');
+    });
+    cardEl.classList.add('chosen');
+    cardEl.style.setProperty('--lift', '-26px');
+
+    document.getElementById('hint').textContent = "this one's yours today";
+
+    const message = messages[index % messages.length] || "(write something here for card " + (index+1) + ")";
+    document.getElementById('revealMessage').textContent = message;
+
+    setTimeout(() => {
+      document.getElementById('reveal').classList.add('active');
+    }, 380);
+  }
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('reveal').classList.remove('active');
+  });
+</script>
+
+</body>
+</html>
